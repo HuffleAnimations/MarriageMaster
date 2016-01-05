@@ -2,7 +2,7 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>at.pcgamingfreaks</groupId>
-	<artifactId>Bukkit_MarriageMaster_FilesToMySQLConverter</artifactId>
+	<artifactId>MarriageMaster_FilesToMySQLConverter</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -69,23 +69,16 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.4</version>
-				<executions>
-					<execution>
-						<id>add-wsdl-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${basedir}/libs</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Main-Class>at.pcgamingfreaks.MarriageMaster.Bukkit.Converter</Main-Class>
+						</manifestEntries>
+					</archive>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
