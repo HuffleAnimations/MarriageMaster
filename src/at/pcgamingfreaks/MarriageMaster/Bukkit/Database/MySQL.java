@@ -191,12 +191,12 @@ public class MySQL
 			PreparedStatement addMarriage, addHome;
 			if(config.getSurname())
 			{
-				addMarriage = getConnection().prepareStatement("INSERT INTO `" + config.getPartnersTable() + "`` (`player1`,`player2`,`priest`,`Surname`,`pvp_state`,`date`) VALUES (?,?,?,?,?,NOW());", Statement.RETURN_GENERATED_KEYS);
+				addMarriage = getConnection().prepareStatement("INSERT INTO `" + config.getPartnersTable() + "` (`player1`,`player2`,`priest`,`Surname`,`pvp_state`,`date`) VALUES (?,?,?,?,?,NOW());", Statement.RETURN_GENERATED_KEYS);
 				addMarriage.setString(i++, marriage.surname);
 			}
 			else
 			{
-				addMarriage = getConnection().prepareStatement("INSERT INTO `" + config.getPartnersTable() + "`` (`player1`,`player2`,`priest`,`pvp_state`,`date`) VALUES (?,?,?,?,NOW());", Statement.RETURN_GENERATED_KEYS);
+				addMarriage = getConnection().prepareStatement("INSERT INTO `" + config.getPartnersTable() + "` (`player1`,`player2`,`priest`,`pvp_state`,`date`) VALUES (?,?,?,?,NOW());", Statement.RETURN_GENERATED_KEYS);
 			}
 			addMarriage.setInt(1, marriage.player1.id);
 			addMarriage.setInt(2, marriage.player2.id);
