@@ -36,7 +36,7 @@ public class MySQL
 		{
 			if(conn == null || conn.isClosed())
 			{
-				System.out.print("Connecting with MySQL database.");
+				System.out.print("Connecting with MySQL database.\n");
 				conn = DriverManager.getConnection("jdbc:mysql://" + config.getMySQLHost() + "/" + config.getMySQLDatabase() + "?allowMultiQueries=true", config.getMySQLUser(), config.getMySQLPassword());
 			}
 		}

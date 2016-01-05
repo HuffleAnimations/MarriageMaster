@@ -92,7 +92,7 @@
 						</goals>
 						<configuration>
 							<createDependencyReducedPom>false</createDependencyReducedPom>
-							<minimizeJar>true</minimizeJar>
+							<minimizeJar>false</minimizeJar>
 							<artifactSet>
 								<includes>
 									<include>at.pcgamingfreaks:YAML-Parser</include>
