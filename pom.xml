@@ -20,7 +20,7 @@
 		<url>http://ci.pcgamingfreaks.at/job/Bukkit_MarriageMaster/</url>
 	</ciManagement>
 
-	<name>Bukkit_MarriageMaster_FilesToMySQLConverter</name>
+	<name>MarriageMaster_FilesToMySQLConverter</name>
 	<description>A converter to convert the old file based storage into new MySQL storage for the Bukkit/Spigot plugin MarriageMaster.</description>
 	<inceptionYear>2015</inceptionYear>
 	<licenses>
