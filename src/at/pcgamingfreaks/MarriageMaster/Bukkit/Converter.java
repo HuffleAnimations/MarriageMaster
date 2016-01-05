@@ -25,9 +25,10 @@ public class Converter
 {
 	public static void main(String [] args)
 	{
-		System.out.print("Loading config file ...");
+		System.out.print("Loading config file ...\n");
 		Config config = new Config();
-		if(!config.isLoaded()) { System.out.print("Failed to load config.yml! Make sure she is in the same folder!"); return; }
+		if(!config.isLoaded()) { System.out.print("Failed to load config.yml! Make sure she is in the same folder!\n"); return; }
+		System.out.print("Config file loaded.\n");
 
 		Files f = new Files(config);
 		Set<Player> players = f.getPlayers();
@@ -35,19 +36,19 @@ public class Converter
 		f.close();
 
 		MySQL mySQL = new MySQL(config);
-		System.out.print("Writing players to MySQL database ...");
+		System.out.print("Writing players to MySQL database ...\n");
 		for(Player p : players)
 		{
 			mySQL.addPlayer(p);
 		}
-		System.out.print("Finished writing players to MySQL database.");
-		System.out.print("Writing marriages to MySQL database ...");
+		System.out.print("Finished writing players to MySQL database.\n");
+		System.out.print("Writing marriages to MySQL database ...\n");
 		for(Marriage m : marriages)
 		{
 			mySQL.addMarriage(m);
 		}
-		System.out.print("Finished writing marriages to MySQL database.");
+		System.out.print("Finished writing marriages to MySQL database.\n");
 		config.setDatabaseType();
-		System.out.print("Finished migrating files to MySQL database.");
+		System.out.print("Finished migrating files to MySQL database.\n");
 	}
 }

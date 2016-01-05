@@ -153,7 +153,7 @@ public class MySQL
 			}
 			else
 			{
-				System.out.print("No auto ID for player \"" + player.name + "\", try to load id from database ...");
+				System.out.print("No auto ID for player \"" + player.name + "\", try to load id from database ...\n");
 				addPlayer = getConnection().prepareStatement("SELECT `player_id` FROM `" + config.getUserTable() + "` WHERE " + (config.getUseUUIDs() ? "`uuid`" : "`name`") + "=?;");
 				addPlayer.setString(1, (config.getUseUUIDs() ? player.uuid : player.name));
 				try { rs.close(); } catch(Exception ignored){}
@@ -164,7 +164,7 @@ public class MySQL
 				}
 				else
 				{
-					System.out.print("No ID for player \"" + player.name + "\", there is something wrong with this player! You should check that!!!");
+					System.out.print("No ID for player \"" + player.name + "\", there is something wrong with this player! You should check that!!!\n");
 				}
 			}
 			try { rs.close(); } catch(Exception ignored){}
@@ -178,7 +178,7 @@ public class MySQL
 		catch(SQLException e)
 		{
 			e.printStackTrace();
-			System.out.print("Failed adding player \"" + player.name + "\"!");
+			System.out.print("Failed adding player \"" + player.name + "\"!\n");
 		}
 	}
 
@@ -218,14 +218,14 @@ public class MySQL
 			}
 			else
 			{
-				System.out.print("No ID for marriage \"" + marriage.player1.name + "<->" + marriage.player2.name + "\"!");
+				System.out.print("No ID for marriage \"" + marriage.player1.name + "<->" + marriage.player2.name + "\"!\n");
 			}
 			try { rs.close(); } catch(Exception ignored){}
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
-			System.out.print("Failed adding marriage \"" + marriage.player1.name + "<->" + marriage.player2.name + "\"!");
+			System.out.print("Failed adding marriage \"" + marriage.player1.name + "<->" + marriage.player2.name + "\"!\n");
 		}
 	}
 }

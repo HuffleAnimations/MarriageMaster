@@ -45,7 +45,7 @@ public class Files
 
 	public void close()
 	{
-		System.out.print("Cleaning some memory ...");
+		System.out.print("Cleaning some memory ...\n");
 		for(Map.Entry<String, YAML> stringYAMLEntry : marryMap.entrySet())
 		{
 			stringYAMLEntry.getValue().dispose();
@@ -53,7 +53,7 @@ public class Files
 		priests.clear();
 		marryMap.clear();
 		player.clear();
-		System.out.print("Finished cleaning memory.");
+		System.out.print("Finished cleaning memory.\n");
 	}
 
 	public Set<Marriage> getMarriages()
@@ -76,7 +76,7 @@ public class Files
 
 	private void prepareData()
 	{
-		System.out.print("Preparing data for database ...");
+		System.out.print("Preparing data for database ...\n");
 		Iterator<Map.Entry<String, YAML>> iterator = marryMap.entrySet().iterator();
 		Map.Entry<String, YAML> e;
 		while(iterator.hasNext())
@@ -112,7 +112,7 @@ public class Files
 			checked.add(s);
 			marriages.add(new Marriage(p1, p2, p, e.getValue().getString("MarriedDay", null), e.getValue().getString("Surname", null), e.getValue().getBoolean("PvP", false), getHome(e.getValue())));
 		}
-		System.out.print("Data prepared.");
+		System.out.print("Data prepared.\n");
 	}
 
 	private Home getHome(YAML yaml)
@@ -127,7 +127,7 @@ public class Files
 
 	private void loadPriests()
 	{
-		System.out.print("Loading priests ...");
+		System.out.print("Loading priests ...\n");
 		File file = new File("priests.yml");
 		priests.clear();
 		if(file.exists())
@@ -148,12 +148,12 @@ public class Files
 				e.printStackTrace();
 			}
 		}
-		System.out.print("Priests loaded.");
+		System.out.print("Priests loaded.\n");
 	}
 
 	private void loadAllPlayers()
 	{
-		System.out.print("Loading players ...");
+		System.out.print("Loading players ...\n");
 		File file = new File("players");
 		String temp;
 		if(file.exists())
@@ -171,7 +171,7 @@ public class Files
 				}
 			}
 		}
-		System.out.print("Players loaded.");
+		System.out.print("Players loaded.\n");
 	}
 
 	private void loadPlayer(String player)
