@@ -200,7 +200,7 @@ public class MySQL
 			}
 			addMarriage.setInt(1, marriage.player1.id);
 			addMarriage.setInt(2, marriage.player2.id);
-			addMarriage.setInt(3, marriage.priest.id);
+			addMarriage.setObject(3, marriage.priest == null ? null : marriage.priest.id);
 			addMarriage.setBoolean(i, marriage.pvpState);
 
 			addMarriage.executeUpdate();
