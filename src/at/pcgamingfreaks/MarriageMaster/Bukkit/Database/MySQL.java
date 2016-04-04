@@ -49,9 +49,8 @@ public class MySQL
 
 	private void checkDB()
 	{
-		try
+		try(Statement stmt = getConnection().createStatement())
 		{
-			Statement stmt = getConnection().createStatement();
 			stmt.execute("CREATE TABLE IF NOT EXISTS `" + config.getUserTable() + "` (`player_id` INT NOT NULL AUTO_INCREMENT, `name` VARCHAR(20) NOT NULL UNIQUE, PRIMARY KEY (`player_id`));");
 			if(config.getUseUUIDs())
 			{
@@ -110,7 +109,6 @@ public class MySQL
 				}
 			}
 			stmt.execute("CREATE TABLE IF NOT EXISTS `" + config.getHomesTable() + "` (`marry_id` INT NOT NULL, `home_x` DOUBLE NOT NULL, `home_y` DOUBLE NOT NULL, `home_z` DOUBLE NOT NULL, `home_world` VARCHAR(45) NOT NULL DEFAULT 'world', PRIMARY KEY (`marry_id`) );");
-			stmt.close();
 		}
 		catch(SQLException e)
 		{
@@ -144,35 +142,38 @@ public class MySQL
 				addPlayer = getConnection().prepareStatement("INSERT INTO `" + config.getUserTable() + "` (`name`) VALUE (?);", Statement.RETURN_GENERATED_KEYS);
 			}
 			addPlayer.setString(1, player.name);
-
 			addPlayer.executeUpdate();
-			ResultSet rs = addPlayer.getGeneratedKeys();
-			if(rs.next())
+			try(ResultSet rs = addPlayer.getGeneratedKeys())
 			{
-				player.id = rs.getInt(1);
-			}
-			else
-			{
-				System.out.print("No auto ID for player \"" + player.name + "\", try to load id from database ...\n");
-				addPlayer = getConnection().prepareStatement("SELECT `player_id` FROM `" + config.getUserTable() + "` WHERE " + (config.getUseUUIDs() ? "`uuid`" : "`name`") + "=?;");
-				addPlayer.setString(1, (config.getUseUUIDs() ? player.uuid : player.name));
-				try { rs.close(); } catch(Exception ignored){}
-				rs = addPlayer.executeQuery();
 				if(rs.next())
 				{
 					player.id = rs.getInt(1);
 				}
 				else
 				{
-					System.out.print("No ID for player \"" + player.name + "\", there is something wrong with this player! You should check that!!!\n");
+					System.out.print("No auto ID for player \"" + player.name + "\", try to load id from database ...\n");
+					addPlayer = getConnection().prepareStatement("SELECT `player_id` FROM `" + config.getUserTable() + "` WHERE " + (config.getUseUUIDs() ? "`uuid`" : "`name`") + "=?;");
+					addPlayer.setString(1, (config.getUseUUIDs() ? player.uuid : player.name));
+					try(ResultSet rs2 = addPlayer.executeQuery())
+					{
+						if(rs2.next())
+						{
+							player.id = rs.getInt(2);
+						}
+						else
+						{
+							System.out.print("No ID for player \"" + player.name + "\", there is something wrong with this player! You should check that!!!\n");
+						}
+					}
 				}
 			}
-			try { rs.close(); } catch(Exception ignored){}
 			if(player.priest && player.id >= 0)
 			{
-				PreparedStatement addPriest = getConnection().prepareStatement("INSERT INTO `" + config.getPriestsTable() + "` (`priest_id`) VALUE (?);");
-				addPriest.setInt(1, player.id);
-				addPriest.execute();
+				try(PreparedStatement addPriest = getConnection().prepareStatement("INSERT INTO `" + config.getPriestsTable() + "` (`priest_id`) VALUE (?);"))
+				{
+					addPriest.setInt(1, player.id);
+					addPriest.execute();
+				}
 			}
 		}
 		catch(SQLException e)
@@ -184,7 +185,7 @@ public class MySQL
 
 	public void addMarriage(Marriage marriage)
 	{
-		if(marriage.player1.id < 0 || marriage.player2.id < 0) return;
+		if(marriage.player1 == null || marriage.player2 == null || marriage.player1.id < 0 || marriage.player2.id < 0) return;
 		try
 		{
 			int i = 4;
@@ -204,25 +205,29 @@ public class MySQL
 			addMarriage.setBoolean(i, marriage.pvpState);
 
 			addMarriage.executeUpdate();
-			ResultSet rs = addMarriage.getGeneratedKeys();
-			if(rs.next() && marriage.home != null)
+			try(ResultSet rs = addMarriage.getGeneratedKeys())
 			{
-				int id = rs.getInt(1);
-				addHome = getConnection().prepareStatement("INSERT INTO `" + config.getHomesTable() + "` (`marry_id`, `home_x`, `home_y`, `home_z`, `home_world`) VALUES (?,?,?,?,?);");
-				addHome.setInt(1, id);
-				addHome.setDouble(2, marriage.home.x);
-				addHome.setDouble(3, marriage.home.y);
-				addHome.setDouble(4, marriage.home.z);
-				addHome.setString(5, marriage.home.world);
-				addHome.execute();
+				if(rs.next())
+				{
+					if(marriage.home != null)
+					{
+						int id = rs.getInt(1);
+						addHome = getConnection().prepareStatement("INSERT INTO `" + config.getHomesTable() + "` (`marry_id`, `home_x`, `home_y`, `home_z`, `home_world`) VALUES (?,?,?,?,?);");
+						addHome.setInt(1, id);
+						addHome.setDouble(2, marriage.home.x);
+						addHome.setDouble(3, marriage.home.y);
+						addHome.setDouble(4, marriage.home.z);
+						addHome.setString(5, marriage.home.world);
+						addHome.execute();
+					}
+				}
+				else
+				{
+					System.out.print("No ID for marriage \"" + marriage.player1.name + "<->" + marriage.player2.name + "\"!\n");
+				}
 			}
-			else
-			{
-				System.out.print("No ID for marriage \"" + marriage.player1.name + "<->" + marriage.player2.name + "\"!\n");
-			}
-			try { rs.close(); } catch(Exception ignored){}
 		}
-		catch(SQLException e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 			System.out.print("Failed adding marriage \"" + marriage.player1.name + "<->" + marriage.player2.name + "\"!\n");
