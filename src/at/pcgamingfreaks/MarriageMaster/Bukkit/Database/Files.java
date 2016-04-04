@@ -29,8 +29,8 @@ public class Files
 	private Config config;
 	private Set<String> priests = new HashSet<>();
 	private Set<Marriage> marriages = new HashSet<>();
-	private Map<String, YAML> marryMap = new HashMap<>();
-	private Map<String, Player> player = new HashMap<>();
+	private Map<String, YAML> marryMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+	private Map<String, Player> player = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
 
 	public Files(Config config)
