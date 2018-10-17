@@ -22,6 +22,8 @@ import at.pcgamingfreaks.yaml.YAMLNotInitializedException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Config
 {
