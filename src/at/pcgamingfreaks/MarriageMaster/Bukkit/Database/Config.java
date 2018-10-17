@@ -112,4 +112,18 @@ public class Config
 			e.printStackTrace();
 		}
 	}
+	
+	public String getMySQLProperties()
+	{
+		List<String> list = config.getStringList("Database.MySQL.Properties", new LinkedList<String>());
+		StringBuilder str = new StringBuilder();
+		if(list != null)
+		{
+			for(String s : list)
+			{
+				str.append("&").append(s);
+			}
+		}
+		return str.toString();
+	}
 }
